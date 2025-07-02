@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Fola's Time Now</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background: #f0f0f0;
+      font-family: 'Georgia', serif;
+    }
+    .container {
+      text-align: center;
+    }
+    .clock {
+      width: 320px;
+      height: 320px;
+      border: 12px solid rgba(0, 0, 0, 0.7);
+      border-radius: 50%;
+      position: relative;
+      background: url('https://imgur.com/a/qsKjD4B') center/cover;
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.4);
+    }
+    .clock-face {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.15);
+      position: relative;
+    }
+    .roman-numeral {
+      position: absolute;
+      color: white;
+      text-shadow: 0 0 8px black, 0 0 3px black;
+      font-size: 18px;
+      font-weight: bold;
+      transform: translate(-50%, -50%);
+    }
+    .hand {
+      position: absolute;
+      left: 50%;
+      bottom: 50%;
+      transform-origin: 50% 100%;
+    }
+    .hour {
+      width: 8px;
+      height: 70px;
+      margin-left: -4px;
+      background: #000;
+      z-index: 3;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.7);
+    }
+    .minute {
+      width: 4px;
+      height: 100px;
+      margin-left: -2px;
+      background: #000;
+      z-index: 2;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.7);
+    }
+    .second {
+      width: 2px;
+      height: 110px;
+      margin-left: -1px;
+      background: #ff0000;
+      z-index: 1;
+      box-shadow: 0 0 5px rgba(255, 0, 0, 0.7);
+    }
+    .center {
+      width: 16px;
+      height: 16px;
+      background: #000;
+      border-radius: 50%;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      margin: -8px 0 0 -8px;
+      z-index: 10;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.7);
+    }
+    .date-display {
+      position: absolute;
+      top: 65%;
+      left: 50%;
+      transform: translateX(-50%);
+      color: white;
+      font-size: 18px;
+      text-shadow: 0 0 8px black, 0 0 3px black;
+      background: rgba(0, 0, 0, 0.5);
+      padding: 5px 10px;
+      border-radius: 15px;
+    }
+    .title {
+      margin-top: 25px;
+      font-size: 28px;
+      color: #222;
+      letter-spacing: 1px;
+      font-style: italic;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="clock">
+      <div class="clock-face">
+        <!-- Roman Numerals -->
+        <div class="roman-numeral" style="top: 5%; left: 50%;">XII</div>
+        <div class="roman-numeral" style="top: 15%; left: 78%;">I</div>
+        <div class="roman-numeral" style="top: 30%; left: 90%;">II</div>
+        <div class="roman-numeral" style="top: 50%; left: 93%;">III</div>
+        <div class="roman-numeral" style="top: 70%; left: 90%;">IIII</div>
+        <div class="roman-numeral" style="top: 85%; left: 78%;">V</div>
+        <div class="roman-numeral" style="top: 95%; left: 50%;">VI</div>
+        <div class="roman-numeral" style="top: 85%; left: 22%;">VII</div>
+        <div class="roman-numeral" style="top: 70%; left: 10%;">VIII</div>
+        <div class="roman-numeral" style="top: 50%; left: 7%;">IX</div>
+        <div class="roman-numeral" style="top: 30%; left: 10%;">X</div>
+        <div class="roman-numeral" style="top: 15%; left: 22%;">XI</div>
+        
+        <!-- Clock Hands -->
+        <div class="hand hour" id="hour"></div>
+        <div class="hand minute" id="minute"></div>
+        <div class="hand second" id="second"></div>
+        <div class="center"></div>
+        
+        <!-- Date Display -->
+        <div class="date-display" id="date"></div>
+      </div>
+    </div>
+    <div class="title">Fola's Time Now</div>
+  </div>
+
+  <script>
+    function updateClock() {
+      const now = new Date();
+      const hour = now.getHours() % 12;
+      const minute = now.getMinutes();
+      const second = now.getSeconds();
+      
+      // Format date as "Weekday, Month Day" (e.g., "Monday, July 15")
+      const options = { weekday: 'long', month: 'long', day: 'numeric' };
+      document.getElementById('date').textContent = now.toLocaleDateString('en-US', options);
+
+      document.getElementById('hour').style.transform = `rotate(${(hour * 30) + (minute * 0.5)}deg)`;
+      document.getElementById('minute').style.transform = `rotate(${minute * 6}deg)`;
+      document.getElementById('second').style.transform = `rotate(${second * 6}deg)`;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+  </script>
+</body>
+</html>
