@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Dallas Time</title>
+  <title>Dallas Time Now</title>
   <style>
     body {
       display: flex;
@@ -150,42 +150,43 @@
 
   <script>
     function updateDallasTime() {
-      // Get current time in Dallas (Central Time)
-      const options = { 
+      // Get current Dallas time
+      const dallasTime = new Date().toLocaleString('en-US', {
         timeZone: 'America/Chicago',
-        hour12: true,
         hour: 'numeric',
         minute: 'numeric',
         second: 'numeric',
+        hour12: false
+      });
+      
+      // Format date for display
+      const dallasDate = new Date().toLocaleString('en-US', {
+        timeZone: 'America/Chicago',
         weekday: 'long',
         month: 'long',
         day: 'numeric'
-      };
+      });
       
-      const dallasTime = new Date().toLocaleString('en-US', options);
-      const timeParts = dallasTime.split(', ');
+      // Extract time parts
+      const [hours, minutes, seconds] = dallasTime.split(':').map(Number);
       
-      // Extract time components
-      const timeString = timeParts[1];
-      const [time, period] = timeString.split(' ');
-      const [hours, minutes, seconds] = time.split(':');
+      // Calculate angles for clock hands
+      const hourAngle = (hours % 12) * 30 + (minutes * 0.5);
+      const minuteAngle = minutes * 6;
+      const secondAngle = seconds * 6;
       
       // Update clock hands
-      const hour12 = parseInt(hours);
-      const hour24 = period === 'PM' ? (hour12 % 12) + 12 : hour12 % 12;
-      const minute = parseInt(minutes);
-      const second = parseInt(seconds);
+      document.getElementById('hour').style.transform = `rotate(${hourAngle}deg)`;
+      document.getElementById('minute').style.transform = `rotate(${minuteAngle}deg)`;
+      document.getElementById('second').style.transform = `rotate(${secondAngle}deg)`;
       
-      document.getElementById('hour').style.transform = `rotate(${(hour24 * 30) + (minute * 0.5)}deg)`;
-      document.getElementById('minute').style.transform = `rotate(${minute * 6}deg)`;
-      document.getElementById('second').style.transform = `rotate(${second * 6}deg)`;
-      
-      // Update date display (e.g. "Monday, July 15")
-      document.getElementById('date').textContent = `${timeParts[0]}, ${timeParts[2]}`;
+      // Update date display
+      document.getElementById('date').textContent = dallasDate;
     }
     
-    setInterval(updateDallasTime, 1000);
+    // Update immediately and every second
     updateDallasTime();
+    setInterval(updateDallasTime, 1000);
   </script>
 </body>
 </html>
