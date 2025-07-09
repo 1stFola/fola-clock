@@ -83,7 +83,7 @@
     }
     .date-display {
       position: absolute;
-      top: 68%;
+      top: 62%;
       left: 50%;
       transform: translateX(-50%);
       color: white;
@@ -151,7 +151,7 @@
         <div class="hand minute" id="minute"></div>
         <div class="hand second" id="second"></div>
         <div class="center"></div>
-
+        
         <!-- Digital Time -->
         <div class="digital-time" id="digital"></div>
         
@@ -159,16 +159,18 @@
         <div class="date-display" id="date"></div>
         
         <!-- Location -->
-       
+        
       </div>
     </div>
-    <div class="title">Dallas, Texas</div>
+    <div class="title">Dallas Texas</div>
   </div>
 
   <script>
     function updateDallasTime() {
-      // Get current Dallas time
-      const dallasTime = new Date().toLocaleString('en-US', {
+      const now = new Date();
+      
+      // Get Dallas time components
+      const dallasTime = now.toLocaleTimeString('en-US', {
         timeZone: 'America/Chicago',
         hour: 'numeric',
         minute: '2-digit',
@@ -176,30 +178,40 @@
         hour12: true
       });
       
-      // Format date for display
-      const dallasDate = new Date().toLocaleString('en-US', {
+      // Get Dallas date
+      const dallasDate = now.toLocaleDateString('en-US', {
         timeZone: 'America/Chicago',
         weekday: 'long',
         month: 'long',
         day: 'numeric'
       });
       
-      // Extract time parts
-      const [time, period] = dallasTime.split(' ');
-      const [hours, minutes, seconds] = dallasTime.split(':').map(Number);
-      
       // Calculate angles for clock hands
-      const hourAngle = (hours % 12) * 30 + (minutes * 0.5);
-      const minuteAngle = minutes * 6;
-      const secondAngle = seconds * 6;
+      const dallasHours = now.toLocaleString('en-US', {
+        timeZone: 'America/Chicago',
+        hour: 'numeric',
+        hour12: false
+      });
+      const dallasMinutes = now.toLocaleString('en-US', {
+        timeZone: 'America/Chicago',
+        minute: 'numeric'
+      });
+      const dallasSeconds = now.toLocaleString('en-US', {
+        timeZone: 'America/Chicago',
+        second: 'numeric'
+      });
+      
+      const hourAngle = (dallasHours % 12) * 30 + (dallasMinutes * 0.5);
+      const minuteAngle = dallasMinutes * 6;
+      const secondAngle = dallasSeconds * 6;
       
       // Update clock hands
       document.getElementById('hour').style.transform = `rotate(${hourAngle}deg)`;
       document.getElementById('minute').style.transform = `rotate(${minuteAngle}deg)`;
       document.getElementById('second').style.transform = `rotate(${secondAngle}deg)`;
-
- // Update digital display
-      document.getElementById('digital').textContent = `${hours}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')} ${period}`;
+      
+      // Update digital display
+      document.getElementById('digital').textContent = dallasTime;
       
       // Update date display
       document.getElementById('date').textContent = dallasDate;
